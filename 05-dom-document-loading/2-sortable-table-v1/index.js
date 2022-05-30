@@ -35,46 +35,38 @@ export default class SortableTable {
   }
 
   get templateHeader() {
-    // return this.headerConfig.map(({ id, title, sortable, sortType }) => {});
-
-    return `
-    <div class="sortable-table__cell" data-id="images" data-sortable="false" data-order="">
-        <span>Image</span>
-    </div>
-    <div class="sortable-table__cell" data-id="title" data-sortable="true" data-order="">
-      <span>Name</span>
-        <span data-element="arrow" class="sortable-table__sort-arrow">
-          <span class="sort-arrow"></span>
-      </span>
-      </div>
-      <div class="sortable-table__cell" data-id="title" data-sortable="true" data-order="">
-        <span>Quantity</span>
-      </div>
-      <div class="sortable-table__cell" data-id="quantity" data-sortable="true" data-order="">
-        <span>Price</span>
-      </div>
-      <div class="sortable-table__cell" data-id="price" data-sortable="true" data-order="">
-        <span>Sales</span>
-      </div>
-    `;
+    return this.headerConfig
+      .map(({ id, title, sortable, sortType }) => {
+        return `
+        <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" data-order="">
+          <span>${title}</span>
+        </div>
+      `;
+      })
+      .join('');
   }
 
   get tempateProducts() {
     return this.data
       .map(({ images = [], title, quantity, price, sales, id }) => {
+        const cellsSortable = [title, quantity, price, sales]
+          .map((el) => {
+            if (el) {
+              return `<div class="sortable-table__cell">${el}</div>`;
+            }
+          })
+          .join('');
+
+        const image = images.length
+          ? `<div class="sortable-table__cell">
+              <img class="sortable-table-image" alt="Image" src="${images[0].url}">
+            </div>`
+          : '';
+
         return `
           <a href="/products/3d-ochki-epson-elpgs03" class="sortable-table__row">
-            <div class="sortable-table__cell">
-              <img 
-                class="sortable-table-image" 
-                alt="Image" 
-                src="https://news-it.ru/images/default.jpg">
-            </div>
-            <div class="sortable-table__cell">${title}</div>
-
-            <div class="sortable-table__cell">${quantity}</div>
-            <div class="sortable-table__cell">${price}</div>
-            <div class="sortable-table__cell">${sales}</div>
+            ${image}
+            ${cellsSortable}
           </a>
       `;
       })
@@ -97,7 +89,7 @@ export default class SortableTable {
     headers.classList.add('sortable-table__header', 'sortable-table__row');
     headers.insertAdjacentHTML('afterbegin', this.templateHeader);
 
-    root.classList.add('products-list__container');
+    root.classList.add('sortable-table');
     root.insertAdjacentElement('afterbegin', headers);
 
     root.insertAdjacentElement('beforeend', body);
@@ -105,10 +97,10 @@ export default class SortableTable {
 
   render() {
     this.roottemplate();
-    this.element.classList.add('sortable-table');
+    this.element.classList.add('products-list__container');
     this.element.innerHTML = '';
 
-    console.log('this.element', this.element);
+    console.log('this.element', this.subElements);
 
     this.element.appendChild(this.subElements.root);
   }
