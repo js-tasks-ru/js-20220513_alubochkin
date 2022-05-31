@@ -1,30 +1,26 @@
 export default class NotificationMessage {
-  $root = document.body;
-  idTimeOut = null;
-  attr = null;
-  element = null;
+  $body = document.body;
+  static notification = null;
+  static idTimeOut = null;
+  element = document.createElement('div');
 
-  constructor(message = '', { duration = 0, type = 'success' } = {}) {
+  constructor(message = '', { duration = 2000, type = 'success' } = {}) {
     this.message = message;
     this.duration = duration;
     this.type = type;
 
-    this.rootTagCreate();
+    this.remove();
+
+    this.notificationElement();
   }
 
-  rootTagCreate() {
-    //       <div ${this.attr} class="notification success" style="--value:${value}s">
+  notificationElement() {
     const value = this.duration / 1000;
-    this.attr = 'data-element="notification"';
 
-    const div = document.createElement('div');
-    div.classList.add('notification', this.type);
-    div.setAttribute('style', `--value:${value}s`);
-    div.setAttribute('data-element', 'notification');
-
-    div.innerHTML = this.template;
-
-    this.element = div;
+    this.element.classList.add('notification', this.type);
+    this.element.setAttribute('style', `--value:${value}s`);
+    this.element.setAttribute('data-element', 'notification');
+    this.element.innerHTML = this.template;
   }
 
   get template() {
@@ -40,35 +36,25 @@ export default class NotificationMessage {
   }
 
   timer() {
-    return setTimeout(() => {
-      this.remove();
-      this.attr = null;
-    }, this.duration);
+    return setTimeout(() => this.remove(), this.duration);
   }
 
-  show(el = this.$root) {
-    this.remove();
-
+  show(el = this.$body) {
+    NotificationMessage.notification = this.element;
     el.insertAdjacentElement('beforeend', this.element);
-    this.idTimeOut = this.timer();
+    NotificationMessage.idTimeOut = this.timer();
   }
 
   remove() {
-    const notification = this.$root.querySelector(
-      '[data-element="notification"]'
-    );
-
-    if (notification) {
-      notification.remove();
-    }
-    if (this.idTimeOut) {
-      clearTimeout(this.idTimeOut);
+    if (NotificationMessage.notification) {
+      NotificationMessage.notification.remove();
+      clearTimeout(NotificationMessage.idTimeOut);
+      NotificationMessage.idTimeOut = null;
     }
   }
 
   destroy() {
     this.remove();
-    // this.$root = null;
     this.element = null;
   }
 }

@@ -58,7 +58,7 @@ export default class ColumnChart {
   }
 
   get template() {
-    const isData = !!this.data?.length;
+    const isData = !!this.data.length;
     return `
       <div class="column-chart__title">Total ${this.label}
         <a href="/${this.link}" class="column-chart__link">View all</a>
