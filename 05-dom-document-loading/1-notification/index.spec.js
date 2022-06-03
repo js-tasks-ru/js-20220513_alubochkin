@@ -6,7 +6,7 @@ describe('dom-document-loading/notification', () => {
   beforeEach(() => {
     notificationMessage = new NotificationMessage('message', {
       duration: 1000,
-      type: 'success'
+      type: 'success',
     });
 
     document.body.append(notificationMessage.element);
@@ -26,7 +26,7 @@ describe('dom-document-loading/notification', () => {
     const duration = 1000;
 
     notificationMessage = new NotificationMessage('message', {
-      duration
+      duration,
     });
 
     expect(notificationMessage.duration).toBe(duration);
@@ -36,7 +36,7 @@ describe('dom-document-loading/notification', () => {
     const duration = 1000;
 
     notificationMessage = new NotificationMessage('message', {
-      duration
+      duration,
     });
 
     const removeMethod = jest.spyOn(notificationMessage, 'remove');
@@ -62,17 +62,17 @@ describe('dom-document-loading/notification', () => {
     expect(notificationMessage.element).toHaveTextContent('hi');
   });
 
-  it('should have ability to set \'success\' type of message', () => {
+  it("should have ability to set 'success' type of message", () => {
     notificationMessage = new NotificationMessage('hi', {
-      type: 'success'
+      type: 'success',
     });
 
     expect(notificationMessage.element).toHaveClass('success');
   });
 
-  it('should have ability to set \'error\' type of message', () => {
+  it("should have ability to set 'error' type of message", () => {
     notificationMessage = new NotificationMessage('hi', {
-      type: 'error'
+      type: 'error',
     });
 
     expect(notificationMessage.element).toHaveClass('error');

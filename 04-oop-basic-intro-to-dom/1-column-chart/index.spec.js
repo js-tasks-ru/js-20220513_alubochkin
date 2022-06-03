@@ -8,7 +8,7 @@ describe('oop-basic-intro-to-dom/column-chart', () => {
       data: [],
       label: '',
       link: '',
-      value: 0
+      value: 0,
     });
 
     document.body.append(columnChart.element);
@@ -53,17 +53,21 @@ describe('oop-basic-intro-to-dom/column-chart', () => {
   it('should have ability to define total value', () => {
     const value = 200;
     columnChart = new ColumnChart({ value });
-    const columnLink = columnChart.element.querySelector('.column-chart__header');
+    const columnLink = columnChart.element.querySelector(
+      '.column-chart__header'
+    );
 
     expect(columnLink).toHaveTextContent(value);
   });
 
   it('should have ability to define "formatHeading" function', () => {
-    const formatHeading = data => `USD ${data}`;
+    const formatHeading = (data) => `USD ${data}`;
     const value = 100;
 
     columnChart = new ColumnChart({ formatHeading, value });
-    const columnLink = columnChart.element.querySelector('.column-chart__header');
+    const columnLink = columnChart.element.querySelector(
+      '.column-chart__header'
+    );
 
     expect(columnLink).toHaveTextContent(formatHeading(value));
   });
@@ -78,9 +82,15 @@ describe('oop-basic-intro-to-dom/column-chart', () => {
 
     expect(chart.childElementCount).toEqual(data.length);
 
-    expect(getComputedStyle(chart.children[0]).getPropertyValue('--value')).toEqual(columnProps[0].value);
-    expect(getComputedStyle(chart.children[1]).getPropertyValue('--value')).toEqual(columnProps[1].value);
-    expect(getComputedStyle(chart.children[2]).getPropertyValue('--value')).toEqual(columnProps[2].value);
+    expect(
+      getComputedStyle(chart.children[0]).getPropertyValue('--value')
+    ).toEqual(columnProps[0].value);
+    expect(
+      getComputedStyle(chart.children[1]).getPropertyValue('--value')
+    ).toEqual(columnProps[1].value);
+    expect(
+      getComputedStyle(chart.children[2]).getPropertyValue('--value')
+    ).toEqual(columnProps[2].value);
 
     expect(chart.children[0].dataset.tooltip).toEqual(columnProps[0].percent);
     expect(chart.children[1].dataset.tooltip).toEqual(columnProps[1].percent);
@@ -99,11 +109,13 @@ describe('oop-basic-intro-to-dom/column-chart', () => {
 
     columnChart.update(newData);
 
-    expect(getComputedStyle(chart.children[0]).getPropertyValue('--value')).toEqual(columnProps[0].value);
+    expect(
+      getComputedStyle(chart.children[0]).getPropertyValue('--value')
+    ).toEqual(columnProps[0].value);
     expect(chart.children[0].dataset.tooltip).toEqual(columnProps[0].percent);
   });
 
-  it('should have loading indication if data wasn\'t passed ', () => {
+  it("should have loading indication if data wasn't passed ", () => {
     columnChart = new ColumnChart();
     document.body.append(columnChart);
 
@@ -121,10 +133,10 @@ function getColumnProps(data) {
   const maxValue = Math.max(...data);
   const scale = 50 / maxValue;
 
-  return data.map(item => {
+  return data.map((item) => {
     return {
-      percent: (item / maxValue * 100).toFixed(0) + '%',
-      value: String(Math.floor(item * scale))
+      percent: ((item / maxValue) * 100).toFixed(0) + '%',
+      value: String(Math.floor(item * scale)),
     };
   });
 }
